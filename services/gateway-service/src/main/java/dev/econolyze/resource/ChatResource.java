@@ -14,12 +14,10 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
-import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.Map;
 
-@Slf4j
 @Path("/api/ai")
 @Authenticated
 public class ChatResource {
@@ -45,7 +43,7 @@ public class ChatResource {
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
-                })
-                .invoke(chunk -> log.info("Chunk AI: {}", chunk));
+                });
     }
+
 }

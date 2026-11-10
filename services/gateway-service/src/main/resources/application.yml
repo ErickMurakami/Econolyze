@@ -20,14 +20,14 @@ quarkus:
       origins: "http://localhost:5173,http://localhost:3000,http://192.168.3.32:3000,http://192.168.3.9:3000,https://econolyze.vercel.app,https://api.erickkami.dev"
       methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
       headers: "accept,authorization,content-type,x-requested-with,x-xsrf-token,cookie"
-      exposed-headers: "*" # Liberado como estava no properties
+      exposed-headers: "*"
       access-control-allow-credentials: true
       access-control-max-age: 24H
 
     ssl:
       certificate:
-        file: /work/ssl/cert.pem
-        key-file: /work/ssl/key.pem
+        files: ${TLS_CERTIFICATE_FILES:/work/ssl/cert.pem}
+        key-files: ${TLS_KEY_FILES:/work/ssl/key.pem}
     insecure-requests: enabled
 
   # Swagger
@@ -39,11 +39,16 @@ quarkus:
   log:
     level: INFO
     category:
-      "dev.econolyze": DEBUG
-      "io.quarkus.smallrye.jwt": TRACE
-      "io.quarkus.security": TRACE
-      "io.smallrye.jwt": TRACE
-      "org.jboss.resteasy.reactive.client": DEBUG
+      "dev.econolyze":
+        level: INFO
+      "io.quarkus.smallrye.jwt":
+        level: INFO
+      "io.quarkus.security":
+        level: INFO
+      "io.smallrye.jwt":
+        level: INFO
+      "org.jboss.resteasy.reactive.client":
+        level: INFO
 
   # REST Clients
   rest-client:
@@ -74,9 +79,6 @@ mp:
 
 "%prod":
   quarkus:
-    log:
-      console:
-        json: true
     rest-client:
       auth-service:
         url: ${AUTH_SERVICE_URL}
