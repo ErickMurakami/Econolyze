@@ -16,16 +16,15 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
-import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 @Path("/auth")
 public class AuthResource {
 
     @Inject
     UserService userService;
-
 
     @POST
     @Path("/register")
@@ -42,9 +41,9 @@ public class AuthResource {
     @PermitAll
     public RestResponse<LoginResponseDTO> login(@Valid LoginRequestDTO request) {
         try {
-            LoginResponseDTO response = userService.login(request.username, request.password);
+            LoginResponseDTO response = userService.login(request.username(), request.password());
             return RestResponse.ok(response);
-        } catch (jakarta.ws.rs.WebApplicationException e) {
+        } catch (WebApplicationException e) {
             throw new WrongCredentialsException(e.getMessage());
         }
     }
@@ -56,7 +55,7 @@ public class AuthResource {
         try {
             userService.revokeRefreshToken();
             return RestResponse.status(RestResponse.Status.NO_CONTENT);
-        } catch (jakarta.ws.rs.WebApplicationException e) {
+        } catch (WebApplicationException e) {
             log.warn("Tentativa de logout com token inválido: {}", e.getMessage());
             return RestResponse.status(RestResponse.Status.UNAUTHORIZED);
         } catch (Exception e) {
@@ -93,7 +92,7 @@ public class AuthResource {
             return RestResponse.status(RestResponse.Status.valueOf("HElP"));
         }
     }
+
+    private static final Logger log = LoggerFactory.getLogger(AuthResource.class);
 }
-
-
 

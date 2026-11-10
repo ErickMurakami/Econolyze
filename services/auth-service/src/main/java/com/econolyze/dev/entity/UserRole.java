@@ -1,12 +1,5 @@
 package com.econolyze.dev.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
 public enum UserRole {
     USER("USER"),
     ADMIN("ADMIN");
@@ -25,5 +18,16 @@ public enum UserRole {
             }
         }
         throw new IllegalArgumentException("Invalid role: " + role);
+    }
+
+    private UserRole(final String role) {
+        this.role = role;
+    }
+
+    private UserRole() {
+    }
+
+    public String getRole() {
+        return this.role;
     }
 }

@@ -14,13 +14,13 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.Instant;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Slf4j
 public class UserService {
 
     static final String SEPARATOR = ",";
@@ -57,11 +57,7 @@ public class UserService {
         }
         TokenGenerator.TokenPair accessToken = tokenGenerator.generate(user.getId(), user.getUsername(), user.getRoles());
         TokenGenerator.TokenPair refreshToken = tokenGenerator.generateRefreshToken(user.getId(), user.getUsername());
-        return LoginResponseDTO.builder()
-                .username(user.getUsername())
-                .authToken(accessToken.token())
-                .refreshToken(refreshToken.token())
-                .build();
+        return new LoginResponseDTO(user.getUsername(), accessToken.token(), refreshToken.token());
     }
 
     @Transactional
@@ -88,17 +84,13 @@ public class UserService {
         RevokedToken revoked = new RevokedToken();
         revoked.jti = jti;
         revoked.expiresAt = jwt.getExpirationTime() > 0
-                ? java.time.Instant.ofEpochSecond(jwt.getExpirationTime())
-                : java.time.Instant.now().plusSeconds(86400);
+                ? Instant.ofEpochSecond(jwt.getExpirationTime())
+                : Instant.now().plusSeconds(86400);
         revokedTokenRepository.persist(revoked);
 
         TokenGenerator.TokenPair accessToken = tokenGenerator.generate(user.getId(), user.getUsername(), user.getRoles());
         TokenGenerator.TokenPair refreshToken = tokenGenerator.generateRefreshToken(user.getId(), user.getUsername());
-        return LoginResponseDTO.builder()
-                .username(user.getUsername())
-                .authToken(accessToken.token())
-                .refreshToken(refreshToken.token())
-                .build();
+        return new LoginResponseDTO(user.getUsername(), accessToken.token(), refreshToken.token());
     }
 
     @Transactional
@@ -112,8 +104,8 @@ public class UserService {
             RevokedToken revoked = new RevokedToken();
             revoked.jti = jti;
             revoked.expiresAt = jwt.getExpirationTime() > 0
-                    ? java.time.Instant.ofEpochSecond(jwt.getExpirationTime())
-                    : java.time.Instant.now().plusSeconds(86400);
+                    ? Instant.ofEpochSecond(jwt.getExpirationTime())
+                    : Instant.now().plusSeconds(86400);
             revokedTokenRepository.persist(revoked);
         }
     }
@@ -138,5 +130,10 @@ public class UserService {
         } else if (!roles.contains(roleStr)) {
             user.setRoles(roles + SEPARATOR + roleStr);
         }
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
+    public UserService() {
     }
 }

@@ -7,6 +7,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.UUID;
 
 @ApplicationScoped
 public class TokenGenerator {
@@ -21,7 +22,7 @@ public class TokenGenerator {
     long refreshTokenExpiry;
 
     public TokenPair generate(Long id, String username, String roles){
-        String jti = java.util.UUID.randomUUID().toString();
+        String jti = UUID.randomUUID().toString();
         Instant expiresAt = Instant.now().plusSeconds(accessTokenExpiry);
         String token = Jwt.claims()
                 .issuer(issuer)
@@ -35,9 +36,8 @@ public class TokenGenerator {
         return new TokenPair(token, jti, expiresAt);
     }
 
-
     public TokenPair generateRefreshToken(Long id, String username){
-        String jti = java.util.UUID.randomUUID().toString();
+        String jti = UUID.randomUUID().toString();
         Instant expiresAt = Instant.now().plusSeconds(refreshTokenExpiry);
         String token = Jwt.claims()
                 .issuer(issuer)
@@ -49,7 +49,6 @@ public class TokenGenerator {
                 .sign();
         return new TokenPair(token, jti, expiresAt);
     }
-
 
     public record TokenPair (
             String token,

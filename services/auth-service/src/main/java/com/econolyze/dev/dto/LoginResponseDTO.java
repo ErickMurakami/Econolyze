@@ -1,13 +1,12 @@
 package com.econolyze.dev.dto;
 
-import lombok.*;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class LoginResponseDTO {
-    private String username;
-    private String authToken;
-    private String refreshToken;
+public record LoginResponseDTO(
+        String username,
+        String authToken,
+        String refreshToken
+) {
+    @Override
+    public String toString() {
+        return "LoginResponseDTO(tokens=[redacted])";
+    }
 }
