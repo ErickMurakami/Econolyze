@@ -35,6 +35,7 @@ public class InvestmentProjectionDTO {
         this.date = date;
     }
 
+    @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof InvestmentProjectionDTO)) return false;
@@ -65,6 +66,7 @@ public class InvestmentProjectionDTO {
         return other instanceof InvestmentProjectionDTO;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -83,6 +85,7 @@ public class InvestmentProjectionDTO {
         return result;
     }
 
+    @Override
     public String toString() {
         return "InvestmentProjectionDTO(userId=" + this.getUserId() + ", amountBlank=" + this.getAmountBlank() + ", amountCdi=" + this.getAmountCdi() + ", category=" + this.getCategory() + ", description=" + this.getDescription() + ", date=" + this.getDate() + ")";
     }

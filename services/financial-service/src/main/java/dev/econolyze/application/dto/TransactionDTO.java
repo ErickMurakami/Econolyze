@@ -138,6 +138,7 @@ public class TransactionDTO {
         this.payments = payments;
     }
 
+    @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof TransactionDTO)) return false;
@@ -192,6 +193,7 @@ public class TransactionDTO {
         return other instanceof TransactionDTO;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -226,6 +228,7 @@ public class TransactionDTO {
         return result;
     }
 
+    @Override
     public String toString() {
         return "TransactionDTO(id=" + this.getId() + ", amount=" + this.getAmount() + ", userId=" + this.getUserId() + ", financialGoalId=" + this.getFinancialGoalId() + ", accountId=" + this.getAccountId() + ", category=" + this.getCategory() + ", type=" + this.getType() + ", method=" + this.getMethod() + ", recurringTemplateId=" + this.getRecurringTemplateId() + ", isRecurring=" + this.getIsRecurring() + ", status=" + this.getStatus() + ", description=" + this.getDescription() + ", date=" + this.getDate() + ", payments=" + this.getPayments() + ")";
     }

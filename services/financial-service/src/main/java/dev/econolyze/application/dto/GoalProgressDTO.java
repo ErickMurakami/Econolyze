@@ -29,6 +29,7 @@ public class GoalProgressDTO {
         this.progress = progress;
     }
 
+    @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof GoalProgressDTO)) return false;
@@ -50,6 +51,7 @@ public class GoalProgressDTO {
         return other instanceof GoalProgressDTO;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -62,6 +64,7 @@ public class GoalProgressDTO {
         return result;
     }
 
+    @Override
     public String toString() {
         return "GoalProgressDTO(id=" + this.getId() + ", name=" + this.getName() + ", progress=" + this.getProgress() + ")";
     }
