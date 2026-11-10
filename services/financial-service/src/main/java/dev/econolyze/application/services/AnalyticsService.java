@@ -8,8 +8,8 @@ import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Objects;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Slf4j
 public class AnalyticsService {
 
     @Inject
@@ -30,11 +28,11 @@ public class AnalyticsService {
 
     public GoalProgressDTO analyzeGoalProgress(FinancialGoalDTO financialGoal, BigDecimal incomesSum) {
         GoalProgressDTO goalProgressDTO = new GoalProgressDTO();
-        goalProgressDTO.setId(financialGoal.getId());
-        goalProgressDTO.setName(financialGoal.getName());
+        goalProgressDTO.setId(financialGoal.id());
+        goalProgressDTO.setName(financialGoal.name());
         // Use a reasonable scale to preserve fractional progress (e.g., 10 decimal places)
         goalProgressDTO.setProgress(incomesSum
-                .divide(financialGoal.getAmount(), 10, RoundingMode.HALF_UP)
+                .divide(financialGoal.amount(), 10, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100)).doubleValue());
         return goalProgressDTO;
     }
@@ -55,5 +53,10 @@ public class AnalyticsService {
                     return Uni.combine().all().unis(tasks).with(list ->
                             list.stream().map(o-> (GoalProgressDTO) o).toList());
                 });
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(AnalyticsService.class);
+
+    public AnalyticsService() {
     }
 }

@@ -11,6 +11,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class TransactionRepository implements PanacheRepository<Transaction> {
@@ -63,8 +65,8 @@ public class TransactionRepository implements PanacheRepository<Transaction> {
         return find("SELECT DISTINCT t FROM Transaction t LEFT JOIN FETCH t.payments WHERE t.id IN ?1", ids)
                 .list()
                 .map(unsortedHydrated -> {
-                    java.util.Map<Long, Transaction> map = unsortedHydrated.stream()
-                            .collect(java.util.stream.Collectors.toMap(Transaction::getId, t -> t));
+                    Map<Long, Transaction> map = unsortedHydrated.stream()
+                            .collect(Collectors.toMap(Transaction::getId, t -> t));
 
                     return ids.stream().map(map::get).toList();
                 });

@@ -1,8 +1,5 @@
 package dev.econolyze.domain.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum PaymentMethod {
     CREDIT_CARD(1, true),
     CASH(2, true),
@@ -26,5 +23,13 @@ public enum PaymentMethod {
             }
         }
         throw new IllegalArgumentException("Invalid code: " + code);
+    }
+
+    public int getCode() {
+        return this.code;
+    }
+
+    public boolean isInstantDebit() {
+        return this.instantDebit;
     }
 }

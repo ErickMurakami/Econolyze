@@ -15,15 +15,13 @@ import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Slf4j
 public class GoalService {
     @Inject
     FinancialGoalRepository financialGoalRepository;
@@ -79,14 +77,8 @@ public class GoalService {
     }
 
     private FinancialGoalDTO dtoBuilder(FinancialGoalRequest request) {
-        return FinancialGoalDTO.builder()
-                .name(request.name())
-                .userId(userContext.getUserId())
-                .amount(request.amount())
-                .description(request.description())
-                .type(request.type())
-                .status(request.status())
-                .build();
+        return new FinancialGoalDTO(null, userContext.getUserId(), request.name(), request.amount(),
+                request.description(), request.type(), request.status());
     }
 
     @WithSession
@@ -99,5 +91,10 @@ public class GoalService {
     public Uni<List<FinancialGoalDTO>> getGoalsByName(String name) {
         return financialGoalRepository.findByName(userContext.getUserId(), name)
                 .map(g -> g.stream().map(financialGoalMapper::mapToDTO).toList());
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(GoalService.class);
+
+    public GoalService() {
     }
 }

@@ -1,8 +1,5 @@
 package dev.econolyze.domain.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum RecurrenceFrequency {
     NONE,
     MONTHLY,
@@ -13,4 +10,5 @@ public enum RecurrenceFrequency {
     QUARTERLY,
     SEMIANNUALLY,
     OTHER;
+
 }

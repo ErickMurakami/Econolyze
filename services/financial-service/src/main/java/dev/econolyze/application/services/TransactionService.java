@@ -26,9 +26,9 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.reactive.mutiny.Mutiny;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -38,8 +38,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Slf4j
 public class TransactionService {
 
     @Inject
@@ -95,23 +93,9 @@ public class TransactionService {
         transactionDTO.setUserId(userContext.getUserId());
         Transaction transaction = transactionMapper.mapToEntity(transactionDTO);
 
-        Payment payment = request.hasInitialPayment()
-                ? Payment.builder()
-                  .accountId(request.accountId())
-                  .transaction(transaction)
-                  .amount(request.initialPayment())
-                  .method(request.method())
-                  .paidAt(LocalDate.now())
-                  .status(PaymentStatus.COMPLETED)
-                  .build()
-                : Payment.builder()
-                  .transaction(transaction)
-                  .amount(request.amount())
-                  .method(request.method())
-                  .paidAt(LocalDate.now())
-                  .accountId(request.accountId())
-                  .status(PaymentStatus.COMPLETED)
-                  .build();
+        Payment payment = new Payment(transaction, request.accountId(),
+                request.hasInitialPayment() ? request.initialPayment() : request.amount(),
+                request.method(), LocalDate.now());
 
         transaction.getPayments().add(payment);
         transaction.recalculateStatus();
@@ -247,5 +231,10 @@ public class TransactionService {
                             .sorted(Comparator.comparing(TransactionByCategoryResponse::amount).reversed())
                             .toList();
                 });
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
+
+    public TransactionService() {
     }
 }

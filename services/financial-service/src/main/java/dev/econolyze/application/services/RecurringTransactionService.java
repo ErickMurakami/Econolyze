@@ -20,17 +20,15 @@ import io.quarkus.scheduler.Scheduled;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @ApplicationScoped
-@RequiredArgsConstructor
 public class RecurringTransactionService {
     @Inject
     RecurrencyTemplateRepository recurrencyTemplateRepository;
@@ -51,21 +49,8 @@ public class RecurringTransactionService {
 
     @WithTransaction
     public Uni<RecurringTemplateResponse> createRecurringFromDTO(RecurrencyTemplateDTO dto) {
-        RecurringTemplate template = RecurringTemplate.builder()
-                .userId(dto.userId())
-                .amount(dto.amount())
-                .type(dto.type())
-                .category(dto.category())
-                .method(dto.method())
-                .frequency(dto.frequency())
-                .startDate(dto.startDate())
-                .endDate(dto.endDate())
-                .maxOccurrences(dto.maxOccurrences())
-                .nextOccurrence(dto.startDate())
-                .description(dto.description())
-                .timesProcessed(0)
-                .isActive(true)
-                .build();
+        RecurringTemplate template = new RecurringTemplate(dto.userId(), dto.amount(), dto.type(), dto.category(),
+                dto.method(), dto.description(), dto.frequency(), dto.startDate(), dto.endDate(), dto.maxOccurrences());
         return recurrencyTemplateRepository.persist(template)
                 .map(recurrencyTemplateMapper::mapToResponse);
     }
@@ -138,16 +123,7 @@ public class RecurringTransactionService {
     }
 
     private Uni<Void> createTransactionFromTemplate(RecurringTemplate template) {
-        Transaction transaction = Transaction.builder()
-                .userId(template.getUserId())
-                .amount(template.getAmount())
-                .type(template.getType())
-                .category(template.getCategory())
-                .description(template.getDescription() + " (Recorrente)")
-                .date(template.getNextOccurrence())
-                .recurringTemplateId(template.getId())
-                .isRecurring(true)
-                .build();
+        Transaction transaction = new Transaction(template);
 
         template.setTimesProcessed(template.getTimesProcessed() + 1);
 
@@ -388,4 +364,8 @@ public class RecurringTransactionService {
 
     }
 
+    private static final Logger log = LoggerFactory.getLogger(RecurringTransactionService.class);
+
+    public RecurringTransactionService() {
+    }
 }

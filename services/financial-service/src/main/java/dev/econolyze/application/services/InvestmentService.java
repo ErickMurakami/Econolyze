@@ -34,14 +34,8 @@ public class InvestmentService {
         return transactionService.getTransactionByUserIdAndType(userContext.getUserId(), TransactionType.INVESTMENT)
                 .map(i -> {
                     if (i.isEmpty()){
-                        return investmentMapper.mapToResponse(InvestmentProjectionDTO.builder()
-                                .userId(userContext.getUserId())
-                                .amountBlank(BigDecimal.ZERO)
-                                .amountCdi(BigDecimal.ZERO)
-                                .date(LocalDate.now())
-                                .category("Investment")
-                                .description("No investments found for the user.")
-                                .build());
+                        return investmentMapper.mapToResponse(new InvestmentProjectionDTO(userContext.getUserId(), BigDecimal.ZERO,
+                                BigDecimal.ZERO, "Investment", "No investments found for the user.", LocalDate.now()));
                     }
                     InvestmentProjectionDTO projection = initializeProjection(i, userContext.getUserId());
                     BigDecimal cdiAnnualRate = getCdiAnnualRate();

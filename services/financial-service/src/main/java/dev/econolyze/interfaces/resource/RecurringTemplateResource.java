@@ -10,16 +10,14 @@ import dev.econolyze.application.services.RecurringTransactionService;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Slf4j
 @Path("/api/recurring-template")
-@RequiredArgsConstructor
 public class RecurringTemplateResource {
     @Inject
     RecurringTransactionService recurringTransactionService;
@@ -94,4 +92,8 @@ public class RecurringTemplateResource {
         return recurringTransactionService.deleteTemplate(templateId).replaceWith(RestResponse.noContent());
     }
 
+    private static final Logger log = LoggerFactory.getLogger(RecurringTemplateResource.class);
+
+    public RecurringTemplateResource() {
+    }
 }

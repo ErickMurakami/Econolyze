@@ -13,15 +13,13 @@ import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Slf4j
 public class PaymentService {
     @Inject
     PaymentRepository paymentRepository;
@@ -76,4 +74,8 @@ public class PaymentService {
                 .map(paymentMapper::mapToResponse);
     }
 
+    private static final Logger log = LoggerFactory.getLogger(PaymentService.class);
+
+    public PaymentService() {
+    }
 }

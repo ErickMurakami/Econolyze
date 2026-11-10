@@ -5,7 +5,6 @@ import dev.econolyze.infrastructure.config.BancoCentralConfig;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import lombok.Getter;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.math.BigDecimal;
@@ -23,7 +22,7 @@ public class CdiService {
     BancoCentralConfig bancoCentralConfig;
 
     private volatile BigDecimal cachedCdiRate = BigDecimal.valueOf(14.90);
-    @Getter
+
     private volatile LocalDate lastUpdate = LocalDate.now();
 
     public Uni<BigDecimal> getCurrentCdiRateAsync(){
@@ -63,10 +62,10 @@ public class CdiService {
     }
 
     public CdiRateDTO getCdiRateInfo(){
-        return CdiRateDTO.builder()
-                .currentRate(this.cachedCdiRate)
-                .lastUpdate(this.lastUpdate)
-                .source("Banco Central do Brasil")
-                .build();
+        return new CdiRateDTO(this.cachedCdiRate, this.lastUpdate, "Banco Central do Brasil");
+    }
+
+    public LocalDate getLastUpdate() {
+        return this.lastUpdate;
     }
 }

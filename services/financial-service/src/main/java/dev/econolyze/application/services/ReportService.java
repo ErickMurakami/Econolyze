@@ -1,11 +1,14 @@
 package dev.econolyze.application.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Slf4j
 public class ReportService {
+
+	private static final Logger log = LoggerFactory.getLogger(ReportService.class);
+
+	public ReportService() {
+	}
 }

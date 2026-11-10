@@ -13,15 +13,13 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Slf4j
 public class BalanceService {
 
     @Inject
@@ -66,7 +64,7 @@ public class BalanceService {
     }
 
     public BigDecimal setBalanceDifference(BalanceDTO balanceDTO){
-        return balanceDTO.getBalance().subtract(balanceDTO.getIncome().subtract(balanceDTO.getExpenses()));
+        return balanceDTO.balance().subtract(balanceDTO.income().subtract(balanceDTO.expenses()));
     }
 
     public Uni<Void> updateUserBalance(Long userId) {
@@ -76,7 +74,7 @@ public class BalanceService {
                         accountService.getAllAccountsForBalance(userId)
                                 .map(accounts -> {
                                     BigDecimal accountsSum = accounts.stream()
-                                            .map(AccountDTO::getActualBalance)
+                                            .map(AccountDTO::actualBalance)
                                             .reduce(BigDecimal.ZERO, BigDecimal::add);
                                     balance.setBalance(balance.getIncome()
                                             .subtract(balance.getExpenses())
@@ -87,14 +85,12 @@ public class BalanceService {
                                 .replaceWithVoid());
     }
 
-
     Balance newBalance(Long userId){
-        return Balance.builder()
-                .userId(userId)
-                .balance(BigDecimal.ZERO)
-                .date(LocalDate.now())
-                .income(BigDecimal.ZERO)
-                .expenses(BigDecimal.ZERO)
-                .build();
+        return new Balance(userId, LocalDate.now());
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(BalanceService.class);
+
+    public BalanceService() {
     }
 }

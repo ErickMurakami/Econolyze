@@ -1,8 +1,5 @@
 package dev.econolyze.domain.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum TransactionType {
     INCOME( true, false),
     EXPENSE( false, true),
@@ -19,4 +16,11 @@ public enum TransactionType {
         this.decreaseBalance = decreaseBalance;
     }
 
+    public boolean isIncreaseBalance() {
+        return this.increaseBalance;
+    }
+
+    public boolean isDecreaseBalance() {
+        return this.decreaseBalance;
+    }
 }

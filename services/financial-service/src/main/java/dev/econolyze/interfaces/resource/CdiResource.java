@@ -1,6 +1,5 @@
 package dev.econolyze.interfaces.resource;
 
-
 import dev.econolyze.application.dto.CdiRateDTO;
 import dev.econolyze.application.services.CdiService;
 import io.smallrye.mutiny.Uni;
@@ -8,12 +7,12 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 
-@Slf4j
 @Path("/api/cdi")
 public class CdiResource {
 
@@ -48,4 +47,6 @@ public class CdiResource {
         cdiService.updateCdiRate();
         return RestResponse.ok("CDI rate updated");
     }
+
+    private static final Logger log = LoggerFactory.getLogger(CdiResource.class);
 }
