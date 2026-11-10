@@ -10,8 +10,14 @@ public class ServiceUnavailableException extends RuntimeException {
         this.serviceName = serviceName;
     }
 
-    public ServiceUnavailableException(String serviceName, Throwable cause) {
-        super(String.format("Service %s is unavailable", serviceName), cause);
+    public ServiceUnavailableException(
+            String serviceName,
+            Throwable cause
+    ) {
+        super(
+                String.format("Service %s is unavailable", serviceName),
+                cause
+        );
         this.serviceName = serviceName;
     }
 

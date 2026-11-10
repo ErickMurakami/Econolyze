@@ -67,7 +67,13 @@ public class User {
         this.roles = roles;
     }
 
-    public User(final Long id, final String username, final String email, final String password, final String roles) {
+    public User(
+            final Long id,
+            final String username,
+            final String email,
+            final String password,
+            final String roles
+    ) {
         this.id = id;
         this.username = username;
         this.email = email;

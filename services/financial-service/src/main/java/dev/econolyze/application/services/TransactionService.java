@@ -12,7 +12,6 @@ import dev.econolyze.application.security.UserContext;
 import dev.econolyze.domain.entity.Payment;
 import dev.econolyze.domain.entity.Transaction;
 import dev.econolyze.domain.enums.Category;
-import dev.econolyze.domain.enums.PaymentStatus;
 import dev.econolyze.domain.enums.TransactionStatus;
 import dev.econolyze.domain.enums.TransactionType;
 import dev.econolyze.domain.exception.UserValidationException;
@@ -82,7 +81,13 @@ public class TransactionService {
                                     List<TransactionResponse> content = hydratedList.stream()
                                             .map(transactionMapper::mapToResponse)
                                             .toList();
-                                    return new PagedResponse<>(content, page, size, count, totalPages);
+                                    return new PagedResponse<>(
+                                            content,
+                                            page,
+                                            size,
+                                            count,
+                                            totalPages
+                                    );
                                 })
                 );
     }
@@ -93,9 +98,13 @@ public class TransactionService {
         transactionDTO.setUserId(userContext.getUserId());
         Transaction transaction = transactionMapper.mapToEntity(transactionDTO);
 
-        Payment payment = new Payment(transaction, request.accountId(),
+        Payment payment = new Payment(
+                transaction,
+                request.accountId(),
                 request.hasInitialPayment() ? request.initialPayment() : request.amount(),
-                request.method(), LocalDate.now());
+                request.method(),
+                LocalDate.now()
+        );
 
         transaction.getPayments().add(payment);
         transaction.recalculateStatus();

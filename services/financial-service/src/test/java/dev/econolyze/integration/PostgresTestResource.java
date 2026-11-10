@@ -28,7 +28,10 @@ public class PostgresTestResource implements QuarkusTestResourceLifecycleManager
                     + "\n-----END PUBLIC KEY-----";
         } catch (Exception e) {
             database.stop();
-            throw new IllegalStateException("Cannot generate test verification key", e);
+            throw new IllegalStateException(
+                    "Cannot generate test verification key",
+                    e
+            );
         }
         return Map.of(
                 "mp.jwt.verify.publickey", publicKey,

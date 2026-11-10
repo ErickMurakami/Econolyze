@@ -195,7 +195,10 @@ public class FinancialDataTools {
             } catch (NumberFormatException e) {
             }
         }
-        return goalClient.simulateProjection(new InvestmentProjectionRequest(amount, months), userContext.getToken())
+        return goalClient.simulateProjection(new InvestmentProjectionRequest(
+                amount,
+                months
+        ), userContext.getToken())
                 .map(t -> t.getEntity().toString())
                 .await().indefinitely();
     }

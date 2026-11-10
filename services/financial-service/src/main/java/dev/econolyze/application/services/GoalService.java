@@ -15,8 +15,6 @@ import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -77,8 +75,15 @@ public class GoalService {
     }
 
     private FinancialGoalDTO dtoBuilder(FinancialGoalRequest request) {
-        return new FinancialGoalDTO(null, userContext.getUserId(), request.name(), request.amount(),
-                request.description(), request.type(), request.status());
+        return new FinancialGoalDTO(
+                null,
+                userContext.getUserId(),
+                request.name(),
+                request.amount(),
+                request.description(),
+                request.type(),
+                request.status()
+        );
     }
 
     @WithSession
@@ -92,8 +97,6 @@ public class GoalService {
         return financialGoalRepository.findByName(userContext.getUserId(), name)
                 .map(g -> g.stream().map(financialGoalMapper::mapToDTO).toList());
     }
-
-    private static final Logger log = LoggerFactory.getLogger(GoalService.class);
 
     public GoalService() {
     }

@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -212,7 +210,23 @@ public class Transaction {
         this.cachedTotalPaid = cachedTotalPaid;
     }
 
-    public Transaction(final Long id, final BigDecimal amount, final Long userId, final Long financialGoalId, final Long accountId, final Category category, final TransactionType type, final PaymentMethod method, final Long recurringTemplateId, final Boolean isRecurring, final TransactionStatus status, final String description, final LocalDate date, final Set<Payment> payments, final BigDecimal cachedTotalPaid) {
+    public Transaction(
+            final Long id,
+            final BigDecimal amount,
+            final Long userId,
+            final Long financialGoalId,
+            final Long accountId,
+            final Category category,
+            final TransactionType type,
+            final PaymentMethod method,
+            final Long recurringTemplateId,
+            final Boolean isRecurring,
+            final TransactionStatus status,
+            final String description,
+            final LocalDate date,
+            final Set<Payment> payments,
+            final BigDecimal cachedTotalPaid
+    ) {
         this.id = id;
         this.amount = amount;
         this.userId = userId;
@@ -231,9 +245,23 @@ public class Transaction {
     }
 
     public Transaction(RecurringTemplate template) {
-        this(null, template.getAmount(), template.getUserId(), null, null, template.getCategory(),
-                template.getType(), null, template.getId(), true, null,
-                template.getDescription() + " (Recorrente)", template.getNextOccurrence(), null, null);
+        this(
+                null,
+                template.getAmount(),
+                template.getUserId(),
+                null,
+                null,
+                template.getCategory(),
+                template.getType(),
+                null,
+                template.getId(),
+                true,
+                null,
+                template.getDescription() + " (Recorrente)",
+                template.getNextOccurrence(),
+                null,
+                null
+        );
     }
 
     public Transaction() {

@@ -47,7 +47,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.createRecurringTemplate(headers.getHeaderString("Authorization"), request)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @PUT
@@ -59,7 +62,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.updateRecurringTemplate(headers.getHeaderString("Authorization"), templateId, request)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @PATCH
@@ -70,7 +76,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.toggleRecurring(headers.getHeaderString("Authorization"), templateId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -80,7 +89,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.getAllRecurringTemplates(headers.getHeaderString("Authorization"))
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -91,7 +103,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.getRecurringTemplateById(headers.getHeaderString("Authorization"), templateId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -101,7 +116,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.getRecurringHistory(httpHeaders.getHeaderString("Authorization"), templateId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -111,7 +129,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.getRecurringSummary(headers.getHeaderString("Authorization"), templateId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -124,7 +145,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.getRecurringPreview(headers.getHeaderString("Authorization"), templateId, page, pageSize)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -137,7 +161,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.getRecurringPreviewFull(headers.getHeaderString("Authorization"), templateId, page, pageSize)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @DELETE
@@ -148,7 +175,10 @@ public class RecurringTemplateResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return recurrencyClient.deleteRecurringTemplate(headers.getHeaderString("Authorization"), templateId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
 }

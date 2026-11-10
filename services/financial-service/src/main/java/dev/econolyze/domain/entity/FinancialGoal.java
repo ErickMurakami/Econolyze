@@ -80,7 +80,15 @@ public class FinancialGoal {
         this.type = type;
     }
 
-    public FinancialGoal(final Long id, final Long userId, final String name, final BigDecimal amount, final String description, final GoalStatus status, final GoalType type) {
+    public FinancialGoal(
+            final Long id,
+            final Long userId,
+            final String name,
+            final BigDecimal amount,
+            final String description,
+            final GoalStatus status,
+            final GoalType type
+    ) {
         this.id = id;
         this.userId = userId;
         this.name = name;

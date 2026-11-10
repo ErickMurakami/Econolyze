@@ -117,7 +117,14 @@ public class InvestmentProjectionDTO {
     public InvestmentProjectionDTO() {
     }
 
-    public InvestmentProjectionDTO(final Long userId, final BigDecimal amountBlank, final BigDecimal amountCdi, final String category, final String description, final LocalDate date) {
+    public InvestmentProjectionDTO(
+            final Long userId,
+            final BigDecimal amountBlank,
+            final BigDecimal amountCdi,
+            final String category,
+            final String description,
+            final LocalDate date
+    ) {
         this.userId = userId;
         this.amountBlank = amountBlank;
         this.amountCdi = amountCdi;

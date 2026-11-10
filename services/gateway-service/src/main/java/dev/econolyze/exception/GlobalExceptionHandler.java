@@ -43,7 +43,8 @@ public class GlobalExceptionHandler {
                 error,
                 message,
                 path,
-                details.isEmpty() ? null : details);
+                details.isEmpty() ? null : details
+        );
         return RestResponse.status(RestResponse.Status.fromStatusCode(status), errorResponse);
     }
 

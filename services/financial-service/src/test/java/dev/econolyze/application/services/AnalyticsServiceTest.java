@@ -10,7 +10,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class AnalyticsServiceTest {
     @Test
     void analyzeGoalProgressPreservesFractionalPercentageAndGoalIdentity() {
-        var goal = new FinancialGoalDTO(7L, null, "Reserve", new BigDecimal("300.00"), null, null, null);
+        var goal = new FinancialGoalDTO(
+                7L,
+                null,
+                "Reserve",
+                new BigDecimal("300.00"),
+                null,
+                null,
+                null
+        );
 
         var progress = new AnalyticsService().analyzeGoalProgress(goal, new BigDecimal("100.00"));
 
@@ -21,7 +29,15 @@ class AnalyticsServiceTest {
 
     @Test
     void analyzeGoalProgressAllowsProgressBeyondTarget() {
-        var goal = new FinancialGoalDTO(null, null, null, new BigDecimal("100.00"), null, null, null);
+        var goal = new FinancialGoalDTO(
+                null,
+                null,
+                null,
+                new BigDecimal("100.00"),
+                null,
+                null,
+                null
+        );
 
         var progress = new AnalyticsService().analyzeGoalProgress(goal, new BigDecimal("125.00"));
 

@@ -8,8 +8,6 @@ import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -54,8 +52,6 @@ public class AnalyticsService {
                             list.stream().map(o-> (GoalProgressDTO) o).toList());
                 });
     }
-
-    private static final Logger log = LoggerFactory.getLogger(AnalyticsService.class);
 
     public AnalyticsService() {
     }

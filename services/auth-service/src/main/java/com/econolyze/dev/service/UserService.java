@@ -38,7 +38,10 @@ public class UserService {
     @Transactional
     public User addUser(RegisterRequestDTO dto) {
         if (userExists(dto.username())) {
-            throw new WebApplicationException("Username já existe: " + dto.username(), Response.Status.CONFLICT);
+            throw new WebApplicationException(
+                    "Username já existe: " + dto.username(),
+                    Response.Status.CONFLICT
+            );
         }
         User user = new User();
         user.setUsername(dto.username());
@@ -57,28 +60,44 @@ public class UserService {
         }
         TokenGenerator.TokenPair accessToken = tokenGenerator.generate(user.getId(), user.getUsername(), user.getRoles());
         TokenGenerator.TokenPair refreshToken = tokenGenerator.generateRefreshToken(user.getId(), user.getUsername());
-        return new LoginResponseDTO(user.getUsername(), accessToken.token(), refreshToken.token());
+        return new LoginResponseDTO(
+                user.getUsername(),
+                accessToken.token(),
+                refreshToken.token()
+        );
     }
 
     @Transactional
     public LoginResponseDTO refreshTokenFromJWT() {
         String typeClaim = jwt.getClaim("type");
         if(!"refresh".equals(typeClaim)){
-            throw new WebApplicationException("Token de refresh inválido", Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(
+                    "Token de refresh inválido",
+                    Response.Status.UNAUTHORIZED
+            );
         }
         String jti = jwt.getTokenID();
         if (jti == null || revokedTokenRepository.isRevoked(jti)){
             log.warn("Tentativa de reuso de refresh token revogado. jti={}", jti);
-            throw new WebApplicationException("Token inválido ou já utilizado", Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(
+                    "Token inválido ou já utilizado",
+                    Response.Status.UNAUTHORIZED
+            );
         }
         String username = jwt.getSubject();
         if (username == null || username.isBlank()){
-            throw new WebApplicationException("Token sem subject!", Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(
+                    "Token sem subject!",
+                    Response.Status.UNAUTHORIZED
+            );
         }
 
         User user = userRepository.find("username", username).firstResult();
         if (user == null){
-            throw new WebApplicationException("Usuário não encontrado: " + username, Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(
+                    "Usuário não encontrado: " + username,
+                    Response.Status.UNAUTHORIZED
+            );
         }
 
         RevokedToken revoked = new RevokedToken();
@@ -90,14 +109,21 @@ public class UserService {
 
         TokenGenerator.TokenPair accessToken = tokenGenerator.generate(user.getId(), user.getUsername(), user.getRoles());
         TokenGenerator.TokenPair refreshToken = tokenGenerator.generateRefreshToken(user.getId(), user.getUsername());
-        return new LoginResponseDTO(user.getUsername(), accessToken.token(), refreshToken.token());
+        return new LoginResponseDTO(
+                user.getUsername(),
+                accessToken.token(),
+                refreshToken.token()
+        );
     }
 
     @Transactional
     public void revokeRefreshToken(){
         String type = jwt.getClaim("type");
         if(!"refresh".equals(type)){
-            throw new WebApplicationException("Token inválido para logout", Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(
+                    "Token inválido para logout",
+                    Response.Status.UNAUTHORIZED
+            );
         }
         String jti = jwt.getTokenID();
         if (jti != null && !revokedTokenRepository.isRevoked(jti)){

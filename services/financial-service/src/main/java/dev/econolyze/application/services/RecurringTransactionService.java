@@ -49,8 +49,18 @@ public class RecurringTransactionService {
 
     @WithTransaction
     public Uni<RecurringTemplateResponse> createRecurringFromDTO(RecurrencyTemplateDTO dto) {
-        RecurringTemplate template = new RecurringTemplate(dto.userId(), dto.amount(), dto.type(), dto.category(),
-                dto.method(), dto.description(), dto.frequency(), dto.startDate(), dto.endDate(), dto.maxOccurrences());
+        RecurringTemplate template = new RecurringTemplate(
+                dto.userId(),
+                dto.amount(),
+                dto.type(),
+                dto.category(),
+                dto.method(),
+                dto.description(),
+                dto.frequency(),
+                dto.startDate(),
+                dto.endDate(),
+                dto.maxOccurrences()
+        );
         return recurrencyTemplateRepository.persist(template)
                 .map(recurrencyTemplateMapper::mapToResponse);
     }
@@ -251,11 +261,23 @@ public class RecurringTransactionService {
         int end = Math.min(start + pageSize, totalElements);
 
         if (start >= totalElements) {
-            return new PagedResponse<>(List.of(), page, pageSize, 0, 0);
+            return new PagedResponse<>(
+                    List.of(),
+                    page,
+                    pageSize,
+                    0,
+                    0
+            );
         }
 
         List<LocalDate> pagedDates = allDates.subList(start, end);
-        return new PagedResponse<>(pagedDates, page, pageSize, totalElements, totalPages);
+        return new PagedResponse<>(
+                pagedDates,
+                page,
+                pageSize,
+                totalElements,
+                totalPages
+        );
     }
 
     private boolean shouldProcess(RecurringTemplate template) {

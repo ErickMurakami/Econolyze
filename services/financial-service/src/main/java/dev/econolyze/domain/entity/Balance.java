@@ -66,7 +66,14 @@ public class Balance {
         this.version = version;
     }
 
-    public Balance(final Long userId, final BigDecimal balance, final LocalDate date, final BigDecimal income, final BigDecimal expenses, final Long version) {
+    public Balance(
+            final Long userId,
+            final BigDecimal balance,
+            final LocalDate date,
+            final BigDecimal income,
+            final BigDecimal expenses,
+            final Long version
+    ) {
         this.userId = userId;
         this.balance = balance;
         this.date = date;
@@ -75,8 +82,18 @@ public class Balance {
         this.version = version;
     }
 
-    public Balance(Long userId, LocalDate date) {
-        this(userId, BigDecimal.ZERO, date, BigDecimal.ZERO, BigDecimal.ZERO, null);
+    public Balance(
+            Long userId,
+            LocalDate date
+    ) {
+        this(
+                userId,
+                BigDecimal.ZERO,
+                date,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                null
+        );
     }
 
     public Balance() {

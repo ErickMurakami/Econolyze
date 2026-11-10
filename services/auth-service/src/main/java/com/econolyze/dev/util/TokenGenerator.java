@@ -33,7 +33,11 @@ public class TokenGenerator {
                 .expiresAt(expiresAt)
                 .claim("jti", jti)
                 .sign();
-        return new TokenPair(token, jti, expiresAt);
+        return new TokenPair(
+                token,
+                jti,
+                expiresAt
+        );
     }
 
     public TokenPair generateRefreshToken(Long id, String username){
@@ -47,7 +51,11 @@ public class TokenGenerator {
                 .expiresAt(expiresAt)
                 .claim("jti", jti)
                 .sign();
-        return new TokenPair(token, jti, expiresAt);
+        return new TokenPair(
+                token,
+                jti,
+                expiresAt
+        );
     }
 
     public record TokenPair (

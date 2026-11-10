@@ -25,7 +25,10 @@ class InvestmentServiceTest {
         when(cdiService.getCurrentCdiRate()).thenReturn(new BigDecimal("12.00"));
 
         var response = investmentService.calculateProjection(
-                new InvestmentProjectionRequest(new BigDecimal("1000.00"), 12)).await().indefinitely();
+                new InvestmentProjectionRequest(
+                        new BigDecimal("1000.00"),
+                        12
+                )).await().indefinitely();
 
         assertEquals(new BigDecimal("1120.00"), response.amountCdi());
         assertEquals(new BigDecimal("1000.00"), response.amountBlank());
@@ -36,7 +39,10 @@ class InvestmentServiceTest {
         when(cdiService.getCurrentCdiRate()).thenReturn(new BigDecimal("12.00"));
 
         var response = investmentService.calculateProjection(
-                new InvestmentProjectionRequest(new BigDecimal("123.45"), 0)).await().indefinitely();
+                new InvestmentProjectionRequest(
+                        new BigDecimal("123.45"),
+                        0
+                )).await().indefinitely();
 
         assertEquals(new BigDecimal("123.45"), response.amountCdi());
     }
@@ -45,11 +51,26 @@ class InvestmentServiceTest {
     void calculateProjectionRejectsMissingAndInvalidInputsBeforeFetchingRate() {
         var requests = new InvestmentProjectionRequest[] {
                 null,
-                new InvestmentProjectionRequest(null, 12),
-                new InvestmentProjectionRequest(BigDecimal.ONE, null),
-                new InvestmentProjectionRequest(BigDecimal.ZERO, 12),
-                new InvestmentProjectionRequest(new BigDecimal("-1"), 12),
-                new InvestmentProjectionRequest(BigDecimal.ONE, -1)
+                new InvestmentProjectionRequest(
+                        null,
+                        12
+                ),
+                new InvestmentProjectionRequest(
+                        BigDecimal.ONE,
+                        null
+                ),
+                new InvestmentProjectionRequest(
+                        BigDecimal.ZERO,
+                        12
+                ),
+                new InvestmentProjectionRequest(
+                        new BigDecimal("-1"),
+                        12
+                ),
+                new InvestmentProjectionRequest(
+                        BigDecimal.ONE,
+                        -1
+                )
         };
 
         for (var request : requests) {

@@ -164,7 +164,23 @@ public class RecurringTemplate {
         this.transactions = transactions;
     }
 
-    public RecurringTemplate(final Long id, final Long userId, final BigDecimal amount, final TransactionType type, final Category category, final PaymentMethod method, final String description, final RecurrenceFrequency frequency, final LocalDate startDate, final LocalDate endDate, final Integer maxOccurrences, final LocalDate nextOccurrence, final Integer timesProcessed, final Boolean isActive, final List<Transaction> transactions) {
+    public RecurringTemplate(
+            final Long id,
+            final Long userId,
+            final BigDecimal amount,
+            final TransactionType type,
+            final Category category,
+            final PaymentMethod method,
+            final String description,
+            final RecurrenceFrequency frequency,
+            final LocalDate startDate,
+            final LocalDate endDate,
+            final Integer maxOccurrences,
+            final LocalDate nextOccurrence,
+            final Integer timesProcessed,
+            final Boolean isActive,
+            final List<Transaction> transactions
+    ) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
@@ -182,11 +198,35 @@ public class RecurringTemplate {
         this.transactions = transactions;
     }
 
-    public RecurringTemplate(Long userId, BigDecimal amount, TransactionType type, Category category,
-                             PaymentMethod method, String description, RecurrenceFrequency frequency,
-                             LocalDate startDate, LocalDate endDate, Integer maxOccurrences) {
-        this(null, userId, amount, type, category, method, description, frequency, startDate, endDate,
-                maxOccurrences, startDate, 0, true, null);
+    public RecurringTemplate(
+            Long userId,
+            BigDecimal amount,
+            TransactionType type,
+            Category category,
+            PaymentMethod method,
+            String description,
+            RecurrenceFrequency frequency,
+            LocalDate startDate,
+            LocalDate endDate,
+            Integer maxOccurrences
+    ) {
+        this(
+                null,
+                userId,
+                amount,
+                type,
+                category,
+                method,
+                description,
+                frequency,
+                startDate,
+                endDate,
+                maxOccurrences,
+                startDate,
+                0,
+                true,
+                null
+        );
     }
 
     public RecurringTemplate() {

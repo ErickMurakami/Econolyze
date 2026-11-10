@@ -46,7 +46,10 @@ public class TransactionResource {
         return transactionDependenciesAggregator.load(headers.getHeaderString("Authorization"))
                 .map(RestResponse::ok)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar as dependencias: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @POST
@@ -55,7 +58,10 @@ public class TransactionResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return transactionClient.createTransaction(headers.getHeaderString("Authorization"), request)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @PUT
@@ -64,7 +70,10 @@ public class TransactionResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return transactionClient.updateTransaction(headers.getHeaderString("Authorization"), id, request)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao atualizar transação: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -78,7 +87,10 @@ public class TransactionResource {
         if(unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return transactionClient.getTransactions(headers.getHeaderString("Authorization"), page, size, filter.type(), filter.category())
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar transações: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -90,6 +102,9 @@ public class TransactionResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return transactionClient.getTransactionById(headers.getHeaderString("Authorization"), id)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar transação por ID): %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 }

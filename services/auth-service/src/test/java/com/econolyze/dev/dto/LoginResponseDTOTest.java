@@ -7,7 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class LoginResponseDTOTest {
     @Test
     void canonicalConstructorPreservesResponseValues() {
-        var response = new LoginResponseDTO("user", "access-value", "refresh-value");
+        var response = new LoginResponseDTO(
+                "user",
+                "access-value",
+                "refresh-value"
+        );
 
         assertEquals("user", response.username());
         assertEquals("access-value", response.authToken());
@@ -16,7 +20,11 @@ class LoginResponseDTOTest {
 
     @Test
     void diagnosticStringDoesNotExposeTokens() {
-        var response = new LoginResponseDTO("user", "access-value", "refresh-value");
+        var response = new LoginResponseDTO(
+                "user",
+                "access-value",
+                "refresh-value"
+        );
 
         assertFalse(response.toString().contains("access-value"));
         assertFalse(response.toString().contains("refresh-value"));

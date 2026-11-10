@@ -6,13 +6,10 @@ import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestResponse;
 
 @Path("/api/balance")
 public class BalanceResource {
-
-    private static final Logger LOG = Logger.getLogger(BalanceResource.class);
 
     @Inject
     BalanceService balanceService;

@@ -38,7 +38,10 @@ public class AccountResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return accountClient.createAccount(headers.getHeaderString("Authorization"), request)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar conta: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -47,7 +50,10 @@ public class AccountResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return accountClient.getAccountById(headers.getHeaderString("Authorization"), accountId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar conta: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -55,7 +61,10 @@ public class AccountResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return accountClient.getAllAccounts(headers.getHeaderString("Authorization"))
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar contas: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @PUT
@@ -64,7 +73,10 @@ public class AccountResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return accountClient.updateAccount(headers.getHeaderString("Authorization"), accountId, request)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao atualizar conta: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @DELETE
@@ -73,7 +85,10 @@ public class AccountResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return accountClient.deleteAccount(headers.getHeaderString("Authorization"), accountId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao deletar conta: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
 }

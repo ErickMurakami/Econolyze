@@ -17,7 +17,11 @@ public class RevokedToken {
     @Column(name = "expires_at", nullable = false)
     public Instant expiresAt;
 
-    public RevokedToken(final Long id, final String jti, final Instant expiresAt) {
+    public RevokedToken(
+            final Long id,
+            final String jti,
+            final Instant expiresAt
+    ) {
         this.id = id;
         this.jti = jti;
         this.expiresAt = expiresAt;

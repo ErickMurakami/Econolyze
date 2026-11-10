@@ -15,22 +15,34 @@ public class AuthExceptionHandler {
         Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
         String message = violations.iterator().next().getMessage();
 
-        return RestResponse.status(Response.Status.BAD_REQUEST, new ErrorResponse(message, 400));
+        return RestResponse.status(Response.Status.BAD_REQUEST, new ErrorResponse(
+                message,
+                400
+        ));
     }
 
     @ServerExceptionMapper
     public RestResponse<ErrorResponse> handleWrongCredentials(WrongCredentialsException exception) {
-        return RestResponse.status(Response.Status.UNAUTHORIZED, new ErrorResponse(exception.getMessage(), 401));
+        return RestResponse.status(Response.Status.UNAUTHORIZED, new ErrorResponse(
+                exception.getMessage(),
+                401
+        ));
     }
 
     @ServerExceptionMapper
     public RestResponse<ErrorResponse> handleInvalidToken(InvalidTokenException exception) {
-        return RestResponse.status(Response.Status.UNAUTHORIZED, new ErrorResponse(exception.getMessage(), 401));
+        return RestResponse.status(Response.Status.UNAUTHORIZED, new ErrorResponse(
+                exception.getMessage(),
+                401
+        ));
     }
 
     @ServerExceptionMapper
     public RestResponse<ErrorResponse> handleGenericException(Exception exception) {
         return RestResponse.status(Response.Status.INTERNAL_SERVER_ERROR,
-                new ErrorResponse("Erro interno: " + exception.getMessage(), 500));
+                new ErrorResponse(
+                        "Erro interno: " + exception.getMessage(),
+                        500
+                ));
     }
 }

@@ -19,7 +19,10 @@ class AuthenticationJsonTest {
         assertEquals("user", request.username());
         assertEquals("value", request.password());
         try (var factory = Validation.buildDefaultValidatorFactory()) {
-            var violations = factory.getValidator().validate(new LoginRequestDTO("", ""));
+            var violations = factory.getValidator().validate(new LoginRequestDTO(
+                    "",
+                    ""
+            ));
             assertEquals(Set.of("username", "password"), violations.stream()
                     .map(v -> v.getPropertyPath().toString()).collect(Collectors.toSet()));
         }
@@ -28,7 +31,11 @@ class AuthenticationJsonTest {
 
     @Test
     void loginResponseRoundTripsWithoutAddingOrRenamingProperties() throws Exception {
-        var response = new LoginResponseDTO("user", "access-value", "refresh-value");
+        var response = new LoginResponseDTO(
+                "user",
+                "access-value",
+                "refresh-value"
+        );
 
         var json = objectMapper.valueToTree(response);
 

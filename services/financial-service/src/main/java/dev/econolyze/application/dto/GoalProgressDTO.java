@@ -69,7 +69,11 @@ public class GoalProgressDTO {
         return "GoalProgressDTO(id=" + this.getId() + ", name=" + this.getName() + ", progress=" + this.getProgress() + ")";
     }
 
-    public GoalProgressDTO(final Long id, final String name, final Double progress) {
+    public GoalProgressDTO(
+            final Long id,
+            final String name,
+            final Double progress
+    ) {
         this.id = id;
         this.name = name;
         this.progress = progress;

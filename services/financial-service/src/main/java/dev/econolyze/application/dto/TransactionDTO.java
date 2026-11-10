@@ -233,7 +233,22 @@ public class TransactionDTO {
         return "TransactionDTO(id=" + this.getId() + ", amount=" + this.getAmount() + ", userId=" + this.getUserId() + ", financialGoalId=" + this.getFinancialGoalId() + ", accountId=" + this.getAccountId() + ", category=" + this.getCategory() + ", type=" + this.getType() + ", method=" + this.getMethod() + ", recurringTemplateId=" + this.getRecurringTemplateId() + ", isRecurring=" + this.getIsRecurring() + ", status=" + this.getStatus() + ", description=" + this.getDescription() + ", date=" + this.getDate() + ", payments=" + this.getPayments() + ")";
     }
 
-    public TransactionDTO(final Long id, final BigDecimal amount, final Long userId, final Long financialGoalId, final Long accountId, final Category category, final TransactionType type, final PaymentMethod method, final Long recurringTemplateId, final Boolean isRecurring, final TransactionStatus status, final String description, final LocalDate date, final List<PaymentDTO> payments) {
+    public TransactionDTO(
+            final Long id,
+            final BigDecimal amount,
+            final Long userId,
+            final Long financialGoalId,
+            final Long accountId,
+            final Category category,
+            final TransactionType type,
+            final PaymentMethod method,
+            final Long recurringTemplateId,
+            final Boolean isRecurring,
+            final TransactionStatus status,
+            final String description,
+            final LocalDate date,
+            final List<PaymentDTO> payments
+    ) {
         this.id = id;
         this.amount = amount;
         this.userId = userId;

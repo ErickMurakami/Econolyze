@@ -42,7 +42,10 @@ public class GoalResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return goalClient.createGoal(headers.getHeaderString("Authorization"), request)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar meta: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -50,7 +53,10 @@ public class GoalResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return goalClient.getAllGoals(headers.getHeaderString("Authorization"))
                 .onFailure().invoke(e-> LOG.errorf("Erro ao consultar Metas: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -59,7 +65,10 @@ public class GoalResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return goalClient.getGoalById(headers.getHeaderString("Authorization"), goalId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar meta: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -68,6 +77,9 @@ public class GoalResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return goalClient.getGoalProgress(headers.getHeaderString("Authorization"), goalId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar progresso da meta: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 }

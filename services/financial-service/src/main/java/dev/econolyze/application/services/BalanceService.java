@@ -7,14 +7,11 @@ import dev.econolyze.application.mapper.BalanceMapper;
 import dev.econolyze.application.security.UserContext;
 import dev.econolyze.domain.entity.Balance;
 import dev.econolyze.infrastructure.repository.BalanceRepository;
-import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -86,10 +83,11 @@ public class BalanceService {
     }
 
     Balance newBalance(Long userId){
-        return new Balance(userId, LocalDate.now());
+        return new Balance(
+                userId,
+                LocalDate.now()
+        );
     }
-
-    private static final Logger log = LoggerFactory.getLogger(BalanceService.class);
 
     public BalanceService() {
     }

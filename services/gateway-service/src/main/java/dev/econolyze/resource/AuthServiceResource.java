@@ -33,7 +33,10 @@ public class AuthServiceResource {
     @PermitAll
     public Uni<RestResponse<LoginResponse>> login(LoginRequest request) {
         if (request == null || request.username() == null) {
-            return Uni.createFrom().failure(new WebApplicationException("Request inválido", Response.Status.BAD_REQUEST));
+            return Uni.createFrom().failure(new WebApplicationException(
+                    "Request inválido",
+                    Response.Status.BAD_REQUEST
+            ));
         }
         log.info("Login attempt: username={}", request.username());
         return authServiceClient.login(request)
@@ -45,7 +48,10 @@ public class AuthServiceResource {
                     }
                     return Uni.createFrom().failure(e);
                 })
-                .onFailure().transform(e -> new ServiceUnavailableException("auth-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "auth-service",
+                        e
+                ));
     }
 
     @POST
@@ -53,17 +59,26 @@ public class AuthServiceResource {
     @PermitAll
     public Uni<RestResponse<RegisterResponse>> register(RegisterRequest request) {
         if (request == null || request.username() == null) {
-            return Uni.createFrom().failure(new WebApplicationException("Request inválido", Response.Status.BAD_REQUEST));
+            return Uni.createFrom().failure(new WebApplicationException(
+                    "Request inválido",
+                    Response.Status.BAD_REQUEST
+            ));
         }
         log.info("Register attempt: username={}", request.username());
         return authServiceClient.register(request)
                 .onFailure(ClientWebApplicationException.class).invoke(Unchecked.consumer(e -> {
                     if (e.getResponse().getStatus() == 409) {
-                        throw new WebApplicationException("Username já existe", 409);
+                        throw new WebApplicationException(
+                                "Username já existe",
+                                409
+                        );
                     }
                 }))
                 .onFailure().invoke(e -> log.error("Error during register: {}", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("auth-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "auth-service",
+                        e
+                ));
     }
     @POST
     @Path("/refresh")
@@ -71,7 +86,10 @@ public class AuthServiceResource {
     public Uni<RestResponse<LoginResponse>> refresh(@HeaderParam("Authorization") String token) {
         if (token == null || token.isBlank()) {
             return Uni.createFrom().failure(
-                    new WebApplicationException("Authorization header ausente", Response.Status.UNAUTHORIZED));
+                    new WebApplicationException(
+                            "Authorization header ausente",
+                            Response.Status.UNAUTHORIZED
+                    ));
         }
         log.info("Refresh token attempt");
         String headerValue = token.startsWith("Bearer ") ? token : "Bearer " + token;
@@ -84,7 +102,10 @@ public class AuthServiceResource {
                     }
                     return Uni.createFrom().failure(e);
                 })
-                .onFailure().transform(e -> new ServiceUnavailableException("auth-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "auth-service",
+                        e
+                ));
     }
 
     @POST
@@ -99,7 +120,10 @@ public class AuthServiceResource {
                     }
                     return Uni.createFrom().failure(e);
                 })
-                .onFailure().transform(e -> new ServiceUnavailableException("auth-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "auth-service",
+                        e
+                ));
     }
 
     private static final Logger log = LoggerFactory.getLogger(AuthServiceResource.class);

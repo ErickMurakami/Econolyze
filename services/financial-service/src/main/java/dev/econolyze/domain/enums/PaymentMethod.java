@@ -11,7 +11,10 @@ public enum PaymentMethod {
     public final int code;
     public final boolean instantDebit;
 
-    PaymentMethod(int code, boolean instantDebit){
+    PaymentMethod(
+            int code,
+            boolean instantDebit
+    ){
         this.code = code;
         this.instantDebit = instantDebit;
     }

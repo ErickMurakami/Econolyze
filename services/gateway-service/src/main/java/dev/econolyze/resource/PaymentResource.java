@@ -43,7 +43,10 @@ public class PaymentResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return paymentClient.createPayment(headers.getHeaderString("Authorization"), request)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao criar pagamento: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service",e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -52,7 +55,10 @@ public class PaymentResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return paymentClient.getPaymentById(headers.getHeaderString("Authorization"), id)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar pagamento: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -61,6 +67,9 @@ public class PaymentResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return paymentClient.getPaymentsByTransactionId(headers.getHeaderString("Authorization"), transactionId)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar pagamento: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 }

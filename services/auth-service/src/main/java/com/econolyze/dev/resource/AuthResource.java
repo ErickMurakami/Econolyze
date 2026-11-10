@@ -33,7 +33,8 @@ public class AuthResource {
         User user = userService.addUser(dto);
         return RestResponse.ok(new RegisterResponse(
                 "Seja bem vindo ao Econolyze!",
-                user.getUsername()));
+                user.getUsername()
+        ));
     }
 
     @POST

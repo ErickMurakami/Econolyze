@@ -34,8 +34,14 @@ public class InvestmentService {
         return transactionService.getTransactionByUserIdAndType(userContext.getUserId(), TransactionType.INVESTMENT)
                 .map(i -> {
                     if (i.isEmpty()){
-                        return investmentMapper.mapToResponse(new InvestmentProjectionDTO(userContext.getUserId(), BigDecimal.ZERO,
-                                BigDecimal.ZERO, "Investment", "No investments found for the user.", LocalDate.now()));
+                        return investmentMapper.mapToResponse(new InvestmentProjectionDTO(
+                                userContext.getUserId(),
+                                BigDecimal.ZERO,
+                                BigDecimal.ZERO,
+                                "Investment",
+                                "No investments found for the user.",
+                                LocalDate.now()
+                        ));
                     }
                     InvestmentProjectionDTO projection = initializeProjection(i, userContext.getUserId());
                     BigDecimal cdiAnnualRate = getCdiAnnualRate();
@@ -112,7 +118,13 @@ public class InvestmentService {
         BigDecimal accumulatedFactor = BigDecimal.valueOf(Math.pow(BigDecimal.ONE.add(cdiMonthlyRate).doubleValue(), months));
         BigDecimal amountCdi = amount.multiply(accumulatedFactor).setScale(2, RoundingMode.HALF_UP);
         return Uni.createFrom().item(
-                new InvestmentProjectionResponse(amount, amountCdi, "Investment", "Cdi Projection for "+months+" months", LocalDate.now())
+                new InvestmentProjectionResponse(
+                        amount,
+                        amountCdi,
+                        "Investment",
+                        "Cdi Projection for "+months+" months",
+                        LocalDate.now()
+                )
         );
     }
 }

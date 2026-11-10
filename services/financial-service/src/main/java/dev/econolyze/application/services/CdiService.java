@@ -62,7 +62,11 @@ public class CdiService {
     }
 
     public CdiRateDTO getCdiRateInfo(){
-        return new CdiRateDTO(this.cachedCdiRate, this.lastUpdate, "Banco Central do Brasil");
+        return new CdiRateDTO(
+                this.cachedCdiRate,
+                this.lastUpdate,
+                "Banco Central do Brasil"
+        );
     }
 
     public LocalDate getLastUpdate() {

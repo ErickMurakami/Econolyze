@@ -8,7 +8,6 @@ import dev.econolyze.application.services.BalanceService;
 import dev.econolyze.application.services.InvestmentService;
 import dev.econolyze.application.services.TransactionService;
 import dev.econolyze.domain.enums.Estimate;
-import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;

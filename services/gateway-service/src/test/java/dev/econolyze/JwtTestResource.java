@@ -27,7 +27,10 @@ public class JwtTestResource implements QuarkusTestResourceLifecycleManager {
                     "quarkus.http.ssl.certificate.files", "",
                     "quarkus.http.ssl.certificate.key-files", "");
         } catch (Exception e) {
-            throw new IllegalStateException("Cannot generate test verification key", e);
+            throw new IllegalStateException(
+                    "Cannot generate test verification key",
+                    e
+            );
         }
     }
 
@@ -36,7 +39,10 @@ public class JwtTestResource implements QuarkusTestResourceLifecycleManager {
         try {
             if (publicKeyFile != null) Files.deleteIfExists(publicKeyFile);
         } catch (IOException e) {
-            throw new IllegalStateException("Cannot remove test public key", e);
+            throw new IllegalStateException(
+                    "Cannot remove test public key",
+                    e
+            );
         }
     }
 }

@@ -25,7 +25,13 @@ public record PagedResponse<T>(
                     List<D> content = tuple.getItem1().stream().map(mapper).toList();
                     long total = tuple.getItem2();
                     int totalPages = (int) Math.ceil((double) total / size);
-                    return new PagedResponse<>(content, page, size, total, totalPages);
+                    return new PagedResponse<>(
+                            content,
+                            page,
+                            size,
+                            total,
+                            totalPages
+                    );
                 });
     }
 }

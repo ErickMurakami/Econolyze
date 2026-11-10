@@ -105,7 +105,16 @@ public class Payment {
         this.description = description;
     }
 
-    public Payment(final Long id, final Transaction transaction, final Long accountId, final BigDecimal amount, final PaymentMethod method, final LocalDate paidAt, final PaymentStatus status, final String description) {
+    public Payment(
+            final Long id,
+            final Transaction transaction,
+            final Long accountId,
+            final BigDecimal amount,
+            final PaymentMethod method,
+            final LocalDate paidAt,
+            final PaymentStatus status,
+            final String description
+    ) {
         this.id = id;
         this.transaction = transaction;
         this.accountId = accountId;
@@ -116,8 +125,23 @@ public class Payment {
         this.description = description;
     }
 
-    public Payment(Transaction transaction, Long accountId, BigDecimal amount, PaymentMethod method, LocalDate paidAt) {
-        this(null, transaction, accountId, amount, method, paidAt, PaymentStatus.COMPLETED, null);
+    public Payment(
+            Transaction transaction,
+            Long accountId,
+            BigDecimal amount,
+            PaymentMethod method,
+            LocalDate paidAt
+    ) {
+        this(
+                null,
+                transaction,
+                accountId,
+                amount,
+                method,
+                paidAt,
+                PaymentStatus.COMPLETED,
+                null
+        );
     }
 
     public Payment() {

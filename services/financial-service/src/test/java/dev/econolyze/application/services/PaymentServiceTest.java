@@ -89,6 +89,13 @@ class PaymentServiceTest {
     }
 
     private PaymentRequest request(String amount) {
-        return new PaymentRequest(7L, new BigDecimal(amount), null, null, null, null);
+        return new PaymentRequest(
+                7L,
+                new BigDecimal(amount),
+                null,
+                null,
+                null,
+                null
+        );
     }
 }

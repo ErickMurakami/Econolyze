@@ -40,7 +40,11 @@ public class MonthlyBudget {
         this.userId = userId;
     }
 
-    public MonthlyBudget(final Long id, final BigDecimal amount, final Long userId) {
+    public MonthlyBudget(
+            final Long id,
+            final BigDecimal amount,
+            final Long userId
+    ) {
         this.id = id;
         this.amount = amount;
         this.userId = userId;

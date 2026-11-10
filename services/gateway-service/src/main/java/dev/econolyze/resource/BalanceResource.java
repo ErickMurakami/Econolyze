@@ -32,6 +32,9 @@ public class BalanceResource {
         if(jwt.getClaim("userId") == null) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return balanceClient.getBalance(headers.getHeaderString("Authorization"))
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar saldo: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 }

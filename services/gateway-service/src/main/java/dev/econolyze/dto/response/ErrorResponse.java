@@ -19,18 +19,59 @@ public record ErrorResponse(
         Map<String, Object> details
 ) {
     // Construtor para erro simples
-    public ErrorResponse(int status, String error, String message, String path) {
-        this(status, error, message, path, LocalDateTime.now(), null, null);
+    public ErrorResponse(
+            int status,
+            String error,
+            String message,
+            String path
+    ) {
+        this(
+                status,
+                error,
+                message,
+                path,
+                LocalDateTime.now(),
+                null,
+                null
+        );
     }
 
     // Construtor para validação
-    public ErrorResponse(int status, String error, String message, String path, List<ValidationError> errors) {
-        this(status, error, message, path, LocalDateTime.now(), errors, null);
+    public ErrorResponse(
+            int status,
+            String error,
+            String message,
+            String path,
+            List<ValidationError> errors
+    ) {
+        this(
+                status,
+                error,
+                message,
+                path,
+                LocalDateTime.now(),
+                errors,
+                null
+        );
     }
 
     // Construtor com detalhes
-    public ErrorResponse(int status, String error, String message, String path, Map<String, Object> details) {
-        this(status, error, message, path, LocalDateTime.now(), null, details);
+    public ErrorResponse(
+            int status,
+            String error,
+            String message,
+            String path,
+            Map<String, Object> details
+    ) {
+        this(
+                status,
+                error,
+                message,
+                path,
+                LocalDateTime.now(),
+                null,
+                details
+        );
     }
 
     public record ValidationError(

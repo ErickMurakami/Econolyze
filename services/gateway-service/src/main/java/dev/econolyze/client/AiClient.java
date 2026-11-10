@@ -1,7 +1,6 @@
 package dev.econolyze.client;
 
 import dev.econolyze.dto.request.ChatRequest;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.HeaderParam;

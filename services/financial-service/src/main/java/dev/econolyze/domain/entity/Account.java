@@ -88,7 +88,16 @@ public class Account {
         this.active = active;
     }
 
-    public Account(final Long id, final Long userId, final String name, final AccountType type, final BigDecimal actualBalance, final BigDecimal creditLimit, final Integer closingDate, final Boolean active) {
+    public Account(
+            final Long id,
+            final Long userId,
+            final String name,
+            final AccountType type,
+            final BigDecimal actualBalance,
+            final BigDecimal creditLimit,
+            final Integer closingDate,
+            final Boolean active
+    ) {
         this.id = id;
         this.userId = userId;
         this.name = name;

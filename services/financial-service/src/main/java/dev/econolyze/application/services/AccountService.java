@@ -15,8 +15,6 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -98,8 +96,6 @@ public class AccountService {
     Uni<List<AccountDTO>> getAllAccountsForBalance(Long userId){
         return accountRepository.listAllByUserId(userId).map(accounts -> accounts.stream().map(accountMapper::mapToDTO).collect(Collectors.toList()));
     }
-
-    private static final Logger log = LoggerFactory.getLogger(AccountService.class);
 
     public AccountService() {
     }

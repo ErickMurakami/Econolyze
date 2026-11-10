@@ -11,7 +11,10 @@ public enum TransactionType {
     private final boolean increaseBalance;
     private final boolean decreaseBalance;
 
-    TransactionType( boolean increaseBalance, boolean decreaseBalance) {
+    TransactionType(
+            boolean increaseBalance,
+            boolean decreaseBalance
+    ) {
         this.increaseBalance = increaseBalance;
         this.decreaseBalance = decreaseBalance;
     }

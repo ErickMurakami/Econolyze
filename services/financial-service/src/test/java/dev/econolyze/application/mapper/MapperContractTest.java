@@ -20,8 +20,14 @@ class MapperContractTest {
 
     @Test
     void createAccountMapsValuesAndLeavesIdentityForPersistenceAndService() {
-        var request = new CreateAccountRequest("Reserve", AccountType.SAVINGS_ACCOUNT,
-                new BigDecimal("123.4567"), BigDecimal.ZERO, 10, true);
+        var request = new CreateAccountRequest(
+                "Reserve",
+                AccountType.SAVINGS_ACCOUNT,
+                new BigDecimal("123.4567"),
+                BigDecimal.ZERO,
+                10,
+                true
+        );
 
         var account = accountMapper.mapToEntity(request);
         var dto = accountMapper.mapToDTO(account);
@@ -37,8 +43,15 @@ class MapperContractTest {
 
     @Test
     void updateAccountPreservesRequestIdentityWithoutAssigningOwner() {
-        var request = new UpdateAccountRequest(7L, "Account", AccountType.CHECKING_ACCOUNT,
-                BigDecimal.TEN, null, null, false);
+        var request = new UpdateAccountRequest(
+                7L,
+                "Account",
+                AccountType.CHECKING_ACCOUNT,
+                BigDecimal.TEN,
+                null,
+                null,
+                false
+        );
 
         var account = accountMapper.mapToEntity(request);
 
@@ -50,8 +63,13 @@ class MapperContractTest {
 
     @Test
     void paymentDtoRoundTripPreservesAmountAndExistingUnmappedRelationshipContract() {
-        var payment = new Payment(null, 7L, new BigDecimal("12.3456"), PaymentMethod.PIX,
-                LocalDate.of(2026, 1, 1));
+        var payment = new Payment(
+                null,
+                7L,
+                new BigDecimal("12.3456"),
+                PaymentMethod.PIX,
+                LocalDate.of(2026, 1, 1)
+        );
         payment.setId(9L);
 
         var dto = paymentMapper.mapToDto(payment);

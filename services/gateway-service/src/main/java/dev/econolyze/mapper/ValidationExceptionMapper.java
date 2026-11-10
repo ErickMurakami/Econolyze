@@ -46,6 +46,10 @@ public class ValidationExceptionMapper {
         String message = violation.getMessage();
         Object rejectedValue = violation.getInvalidValue();
 
-        return new ErrorResponse.ValidationError(field, message, rejectedValue);
+        return new ErrorResponse.ValidationError(
+                field,
+                message,
+                rejectedValue
+        );
     }
 }

@@ -39,7 +39,10 @@ public class InvestmentResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return investmentClient.getDailyInvestmentProgress(headers.getHeaderString("Authorization"), percentage)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar projeção de investimento diário: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -48,7 +51,10 @@ public class InvestmentResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return investmentClient.getMonthlyInvestmentProgress(headers.getHeaderString("Authorization"), percentage)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar projeção de investimento mensal: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 
     @GET
@@ -57,6 +63,9 @@ public class InvestmentResource {
         if (unauthorized()) return Uni.createFrom().item(RestResponse.status(RestResponse.Status.UNAUTHORIZED));
         return investmentClient.getAnnualInvestmentProgress(headers.getHeaderString("Authorization"), percentage)
                 .onFailure().invoke(e -> LOG.errorf("Erro ao buscar projeção de investimento anual: %s", e.getMessage()))
-                .onFailure().transform(e -> new ServiceUnavailableException("financial-service", e));
+                .onFailure().transform(e -> new ServiceUnavailableException(
+                        "financial-service",
+                        e
+                ));
     }
 }
