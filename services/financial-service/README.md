@@ -1,62 +1,56 @@
-# financial-service
+# Financial service
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Owns accounts, consolidated balances, transactions, payments, recurring templates, goals, reports, and CDI projections. It runs on port **8082**, using Java 21, Quarkus 3.32.2, Hibernate Reactive/Panache, and PostgreSQL.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+The existing package structure separates application services and DTOs, domain entities, repositories and external clients, and REST resources. MapStruct handles DTO/entity mappings. Reactive reads use `@WithSession`; writes use `@WithTransaction`. CDI rates are refreshed by the existing scheduled jobs and cached with a fallback value.
 
-## Running the application in dev mode
+Entities use explicit constructors and accessors. Payment and balance constructors cover their usual creation paths, and the recurring-transaction constructor copies a template's values. Immutable DTOs are records; DTOs populated in stages remain mutable classes. There are no DTO or entity builders.
 
-You can run your application in dev mode that enables live coding using:
+## Run locally
 
-```shell script
-./mvnw quarkus:dev
+From this directory:
+
+```bash
+mvn quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Use Java 21 and configure `DB_USERNAME`, `DB_PASSWORD`, `DB_JDBC_URL`, `DB_URL`, `BANCO_CENTRAL_API_URL`, and `INTERNAL_SECRET`. Set `MP_JWT_VERIFY_PUBLICKEY_LOCATION` to the public key matching the authentication service. JDBC and reactive URLs must point to the same PostgreSQL database. See the [environment table](../../README.md#requirements-and-configuration) for formats.
 
-## Packaging and running the application
+JDBC requires TLS by default. Override `QUARKUS_DATASOURCE_JDBC_ADDITIONAL_JDBC_PROPERTIES_SSLMODE=disable` only for a local database without TLS.
 
-The application can be packaged using:
+Flyway applies `V1.1.0__Init_Finance_Schema.sql` to the `finance` schema at startup. Monetary columns use `NUMERIC(19,4)`. This refactoring does not change migrations or rounding policies.
 
-```shell script
-./mvnw package
+REST resources include `/api/accounts`, `/api/balance`, `/api/transaction`, `/api/payment`, `/api/recurring-template`, `/api/goal`, `/api/dashboard`, `/api/category`, and `/api/cdi`. Internal routes additionally require `X-Internal-Token`. Use the gateway for the frontend's normal API entry point.
+
+## Build and test
+
+```bash
+mvn clean verify
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Unit tests cover projections, goal progress, CDI fallback, rejected payments, transaction states, entity construction, and DTO JSON. Coverage is reported at `target/site/jacoco/index.html`.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+Run PostgreSQL integration tests with Docker available:
 
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+```bash
+mvn -Pintegration clean verify
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+The profile starts PostgreSQL 17 through Testcontainers and applies the actual migration. It checks category HTTP output, internal-token rejection, monetary precision, and JDBC rollback. The three integration scenarios passed locally using Podman’s Docker-compatible API. They do not establish coverage of Hibernate Reactive write transactions or concurrent payments.
 
-## Creating a native executable
+`ReportService` and `BudgetService` are placeholders; `/api/report` currently returns the literal string `report`. Reporting and budgeting should not be treated as completed features.
 
-You can create a native executable using:
+Ownership checks, payment-status aggregation, cached paid totals, and concurrent balance changes remain the most important follow-up work. See the [code review](../../docs/backend-review.md).
 
-```shell script
-./mvnw package -Dnative
+## Mapper generation in the IDE
+
+MapStruct 1.6.3 is configured as a Maven annotation processor. The POM enables JDT/m2e annotation processing and all mapper targets must be mapped or explicitly ignored. Generated implementations belong under `target/generated-sources/annotations`; do not edit them.
+
+To rebuild the implementations with diagnostic output:
+
+```bash
+mvn clean compile -Dmapstruct.verbose=true
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/financial-service-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+If the IDE reports “No implementation was created … erroneous element null” while this command succeeds, refresh the Maven project and clean the Java language-server workspace. The IDE may retain processor or type information from before the model changes. In VS Code, use **Java: Clean Java Language Server Workspace** and reload the project. This configuration follows [MapStruct’s IDE guidance](https://mapstruct.org/documentation/ide-support/).

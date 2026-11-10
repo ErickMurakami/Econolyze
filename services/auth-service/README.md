@@ -1,82 +1,30 @@
-# auth-service
+# Authentication service
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Handles registration, password verification, access and refresh token issuance, refresh rotation, and logout. It runs on port **8081** and uses Java 21 with Quarkus 3.32.2.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+`AuthResource` exposes `/auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, and `/auth/ping`. `UserService` owns the application flow. Users and revoked refresh tokens are stored through blocking Hibernate ORM/Panache; writes use Jakarta transactions. Passwords are hashed with BCrypt, and tokens are signed with RSA.
 
-## Running the application in dev mode
+## Run locally
 
-You can run your application in dev mode that enables live coding using:
+From this directory, with Java 21 and Maven installed:
 
-```shell script
-./mvnw quarkus:dev
+```bash
+mvn quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Configure `DB_USERNAME`, `DB_PASSWORD`, and `DB_JDBC_URL`. Supply a private signing key through `SMALLRYE_JWT_SIGN_KEY_LOCATION` and its matching public key through `MP_JWT_VERIFY_PUBLICKEY_LOCATION`. The configured issuer is `econolyze`. Keys and credentials are not included in the repository.
 
-## Packaging and running the application
+JDBC requires TLS by default. For a local database without TLS, override `QUARKUS_DATASOURCE_JDBC_ADDITIONAL_JDBC_PROPERTIES_SSLMODE=disable` in the local environment.
 
-The application can be packaged using:
+Flyway applies `src/main/resources/db/migration/V1.0.0__Init_Auth_Schema.sql` at startup. It creates the `authentication` schema, users, and revoked-token storage. Do not edit an already applied migration.
 
-```shell script
-./mvnw package
+## Build and test
+
+```bash
+mvn clean verify
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Current tests check login DTO JSON, Bean Validation, canonical construction, and credential-safe diagnostic output. They do not cover database-backed registration or refresh-token concurrency. JaCoCo reports are written to `target/site/jacoco/index.html` after verification.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/auth-service-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and
-  Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on
-  it.
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes
-  with Swagger UI
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code
-  for Hibernate ORM via the active record or the repository pattern
-- SmallRye JWT ([guide](https://quarkus.io/guides/security-jwt)): Secure your applications with JSON Web Token
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+The admin endpoint uses a lowercase role while stored role values are uppercase; that inconsistency and refresh-token races remain review items. See the [backend review](../../docs/backend-review.md) and [project setup](../../README.md).

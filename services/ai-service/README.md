@@ -1,96 +1,34 @@
-# ai-service
+# AI service
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Provides financial chat, retrieval of embedded financial context, and tools for querying the financial service and performing calculations. It runs on port **8083**, using Java 21 and Quarkus 3.34.6 with LangChain4j.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+Chat uses Groq's OpenAI-compatible API. Embeddings use Gemini with 768 dimensions, stored in PostgreSQL through pgvector. `ChatService` coordinates the assistant; REST resources, financial clients, tools, conversation memory, and embedding jobs retain their existing packages.
 
-## Running the application in dev mode
+## Run locally
 
-You can run your application in dev mode that enables live coding using:
+From this directory:
 
-```shell script
-./mvnw quarkus:dev
+```bash
+mvn quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Configure `GROQ_API_KEY`, `GEMINI_API_KEY`, `DB_USERNAME`, `DB_PASSWORD`, `DB_JDBC_URL`, `DB_URL`, `DB_HOST`, `DB_PORT`, `DB_NAME`, and `INTERNAL_SECRET`. Set `MP_JWT_VERIFY_PUBLICKEY_LOCATION` to the authentication service's public key. For local processes, set `QUARKUS_REST_CLIENT_FINANCIAL_SERVICE_URL=http://localhost:8082` instead of the default container hostname.
 
-## Packaging and running the application
+The shared internal secret must match the financial service. It signs the service token used in `X-Internal-Token`. Never put API keys or signing secrets in tracked files. Model request/response logging is disabled to avoid recording financial prompts and responses. All three configured timeouts use ISO-8601 `PT60S` (60 seconds), accepted by Java Duration parsing and Quarkus configuration tooling.
 
-The application can be packaged using:
+JDBC requires TLS by default. For a local database without TLS, override `QUARKUS_DATASOURCE_JDBC_ADDITIONAL_JDBC_PROPERTIES_SSLMODE=disable` locally.
 
-```shell script
-./mvnw package
+Flyway applies `V1.2.0__Init_AI_Schema.sql`, including the vector extension and the `ai` schema. The database must support pgvector and allow the migration's extension creation. Automatic Flyway repair is currently enabled and needs review before production use.
+
+The chat endpoint is `/ai/chat`; the gateway exposes it as `/api/ai/chat`. The existing `/dev/rag` resources need access restrictions before production exposure. Retrieval ownership is also a review item; see the [code review](../../docs/backend-review.md).
+
+## Build and test
+
+```bash
+mvn clean verify
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Current tests exercise the local financial calculation tools, including zero months and deficit precision. They do not start the AI runtime or call external model providers. JaCoCo reports are at `target/site/jacoco/index.html`. A packaged build does not verify provider credentials, pgvector retrieval, or startup migrations.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/ai-service-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- SmallRye JWT ([guide](https://quarkus.io/guides/security-jwt)): Secure your applications with JSON Web Token
-- Reactive PostgreSQL client ([guide](https://quarkus.io/guides/reactive-sql-clients)): Connect to the PostgreSQL database using the reactive pattern
-- LangChain4j Easy RAG ([guide](https://docs.quarkiverse.io/quarkus-langchain4j/dev/rag-easy-rag.html)): Provides the Easy RAG functionality with LangChain4j
-- LangChain4j pgvector embedding store ([guide](https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.html)): Provides the pgvector Embedding store for Quarkus LangChain4j
-- LangChain4j AI Gemini ([guide](https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.html)): Provides integration of Quarkus LangChain4j with AI Gemini
-
-## Provided Code
-
-### LangChain4j Easy RAG
-
-This code is a very basic sample service to start developing with Quarkus LangChain4j using Easy RAG.
-
-You have to add an extension that provides an embedding model. For that, you can choose from the plethora of extensions like quarkus-langchain4j-openai, quarkus-langchain4j-ollama, or import an in-process embedding model - these have the advantage of not having to send data over the wire.
-
-In `./easy-rag-catalog/` you can find a set of example documents that will be used to create the RAG index which the bot (`src/main/java/org/acme/Bot.java`) will ingest.
-
-On first run, the bot will create the RAG index and store it in `easy-rag-catalog.json` file and reuse it on subsequent runs.
-This can be disabled by setting the `quarkus.langchain4j.easy-rag.reuse-embeddings.enabled` property to `false`.
-
-Add it to a Rest endpoint:
-```java
-    @Inject
-    Bot bot;
-    
-    @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    public String chat(String q) {
-        return bot.chat(q);
-    }
-```
-
-In a more complete example, you would have a web interface and use websockets that would provide more interactive experience, see [ChatBot Easy RAG Sample](https://github.com/quarkiverse/quarkus-langchain4j/tree/main/samples/chatbot-easy-rag) for such an example.
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+See the [project README](../../README.md) for full environment configuration and the other services.

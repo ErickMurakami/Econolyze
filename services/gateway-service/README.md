@@ -1,62 +1,39 @@
-# gateway-service
+# API gateway
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+The frontend's API entry point. It forwards requests to authentication, financial, and AI services and aggregates financial responses. The gateway uses Java 21 and Quarkus 3.32.2, listening on HTTP **8080** and HTTPS **8443** when certificates are supplied.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+REST resources, clients, aggregators, filters, and exception mappers remain in their existing packages. JWT verification uses the authentication service's public key. The cookie-to-header and CSRF flow is implemented in `SecurityFilter`; its current security limitations are described in the [code review](../../docs/backend-review.md).
 
-## Running the application in dev mode
+## Run locally
 
-You can run your application in dev mode that enables live coding using:
+From this directory, with Java 21 and Maven:
 
-```shell script
-./mvnw quarkus:dev
+```bash
+export AUTH_SERVICE_URL=http://localhost:8081
+export FINANCIAL_SERVICE_URL=http://localhost:8082
+export AI_SERVICE_URL=http://localhost:8083
+mvn quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Set `MP_JWT_VERIFY_PUBLICKEY_LOCATION` to the matching public verification key. The gateway has no database.
 
-## Packaging and running the application
+`src/main/resources/application.yml` configures the service URLs, CORS, TLS, logging, and Swagger. TLS paths default to `/work/ssl/cert.pem` and `/work/ssl/key.pem`; override them with `TLS_CERTIFICATE_FILES` and `TLS_KEY_FILES`. These use Quarkus's supported plural certificate properties and are now effective. Provide valid files when using HTTPS.
 
-The application can be packaged using:
+For an HTTP-only local run without those mounted certificates:
 
-```shell script
-./mvnw package
+```bash
+mvn quarkus:dev -Dquarkus.http.ssl.certificate.files= -Dquarkus.http.ssl.certificate.key-files=
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+The production profile requires all three downstream URL variables. Logging uses the standard console format; JSON logging is not enabled because the project does not include the JSON logging extension.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+`/api/ping` returns `pong`. Swagger UI is at `/swagger-ui`, and OpenAPI is at `/q/openapi`. Chat is exposed at `/api/ai/chat`; other route groups are listed in the [main README](../../README.md#features-and-api).
 
-If you want to build an _über-jar_, execute the following command:
+## Build and test
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+```bash
+mvn clean verify
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/gateway-service-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+Quarkus/REST Assured tests verify ping and anonymous account-access rejection. Tests generate a temporary verification key and override downstream URLs, so production keys and running downstream services are not required. They do not yet cover authenticated forwarding, aggregation failures, or CSRF behavior. Coverage is reported at `target/site/jacoco/index.html`.
