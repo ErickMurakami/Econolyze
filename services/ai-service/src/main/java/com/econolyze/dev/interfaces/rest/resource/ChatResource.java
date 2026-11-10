@@ -10,14 +10,11 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Path("/ai/chat")
 @ApplicationScoped
 public class ChatResource {
 
-    private static final Logger log = LoggerFactory.getLogger(ChatResource.class);
     @Inject
     ChatService chatService;
     @Inject
@@ -31,7 +28,6 @@ public class ChatResource {
         JsonNumber userIdClaim = jwt.getClaim("userId");
         Long userId = userIdClaim.longValue();
 
-        return chatService.chat(chatRequest.message(), userId)
-                .invoke(answer -> log.info("Resposta Gemini: "+  answer));
+        return chatService.chat(chatRequest.message(), userId);
     }
 }
