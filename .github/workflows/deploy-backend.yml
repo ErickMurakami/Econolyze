@@ -1,17 +1,20 @@
 name: Deploy Back-End (Quarkus)
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - 'services/**'
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
+  validate:
+    uses: ./.github/workflows/validate-backend.yml
+
   build-and-push:
+    needs: validate
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -81,6 +84,9 @@ jobs:
             ghcr.io/erickkamii/${{ matrix.service }}:${{ github.sha }}
 
   deploy:
+    permissions:
+      contents: read
+      packages: read
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
